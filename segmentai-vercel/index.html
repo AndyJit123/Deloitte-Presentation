@@ -646,6 +646,124 @@ hr.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
 @keyframes tip-timer-drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 @keyframes tip-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 @keyframes tip-out{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.95)}}
+/* ═══════════════════════════════════════════
+   RESPONSIVE — tablet (768px) and mobile (480px)
+═══════════════════════════════════════════ */
+
+/* ── Tablet (≤900px) ── */
+@media (max-width: 900px) {
+  /* Nav: hide meta status, shrink tabs */
+  .nav-meta { display: none; }
+  .nav-tab { padding: 5px 9px; font-size: 10px; letter-spacing: 0; }
+  .tour-help-btn { padding: 4px 8px; font-size: 10px; }
+
+  /* Setup: stack left/right panels */
+  .setup-grid { grid-template-columns: 1fr; }
+  .q-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Chat: hide insights sidebar */
+  .chat-layout { grid-template-columns: 1fr; height: calc(100vh - 56px); }
+  .insights-panel { display: none; }
+
+  /* Segments */
+  .segments-grid { grid-template-columns: 1fr 1fr; }
+  .detail-grid { grid-template-columns: 1fr; }
+
+  /* Reasoning map: hide sidebar, full-width canvas */
+  .mm-layout { grid-template-columns: 1fr; }
+  .mm-sidebar { display: none; }
+  .mm-detail { width: 300px; }
+}
+
+/* ── Mobile (≤600px) ── */
+@media (max-width: 600px) {
+  /* Nav: logo only + compact tabs */
+  .nav { padding: 0 10px; gap: 6px; }
+  .nav-logo { font-size: 14px; }
+  .nav-logo .dot { width: 6px; height: 6px; }
+  .nav-tabs { gap: 1px; }
+  .nav-tab { padding: 4px 7px; font-size: 9px; }
+  /* Shorten tab labels on mobile */
+  .nav-tab#tab-setup::after { content: '① Data'; }
+  .nav-tab#tab-segments::after { content: '② Segs'; }
+  .nav-tab#tab-chat::after { content: '③ Chat'; }
+  .nav-tab#tab-mindmap::after { content: '④ Map'; }
+  /* Hide original text, show short version */
+  .nav-tab { font-size: 0; }
+  .nav-tab::after { font-size: 9px; font-family: var(--mono); }
+  .tour-help-btn { display: none; }
+
+  /* Screen padding */
+  .screen { padding: 14px 12px 80px; }
+
+  /* Setup */
+  .q-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .preset-card, .q-card { padding: 12px; }
+
+  /* Chat */
+  .chat-layout { height: calc(100vh - 56px); }
+  .chat-input-row { padding: 8px 10px; gap: 6px; }
+  .chat-input { font-size: 14px; } /* prevent iOS zoom on focus */
+  .send-btn { padding: 8px 12px; font-size: 14px; }
+  .msg { max-width: 95%; }
+  .msg-bubble { font-size: 13px; padding: 9px 12px; }
+
+  /* Suggestion strip — horizontal scroll on mobile */
+  .suggestion-strip { padding: 8px 10px 6px; gap: 5px; }
+  .sug-chip { font-size: 11px; padding: 5px 10px; }
+
+  /* Segments */
+  .segments-grid { grid-template-columns: 1fr; }
+  .seg-metrics { grid-template-columns: 1fr 1fr 1fr; }
+  .seg-toolbar { flex-wrap: wrap; }
+  .seg-toolbar h1 { font-size: 16px; }
+  .seg-filter { display: none; } /* too cramped on mobile, hide filter chips */
+
+  /* Reasoning map */
+  .mm-detail { width: 100%; left: 0; right: 0; top: auto; bottom: 0;
+    height: 70vh; border-left: none; border-top: 1px solid var(--border2);
+    box-shadow: 0 -8px 32px rgba(0,0,0,.4); }
+  .mm-toolbar { top: 8px; right: 8px; }
+
+  /* Tour */
+  .tour-card { width: calc(100vw - 24px); left: 12px !important; }
+  .tour-welcome-card { width: calc(100% - 24px); margin: 12px; }
+  .tour-welcome-features { grid-template-columns: 1fr; }
+  .tour-welcome-body { padding: 16px 20px; }
+
+  /* Tip popovers */
+  .tip-popover { width: calc(100vw - 24px); left: 12px !important; right: auto; }
+
+  /* Tables */
+  .customer-table-wrap { overflow-x: auto; }
+  .data-preview-table { font-size: 10px; }
+
+  /* Cards */
+  .card { padding: 14px; }
+  .aside-card { padding: 12px; }
+}
+
+/* ── Very small (≤380px — older iPhones) ── */
+@media (max-width: 380px) {
+  .nav-tab { padding: 3px 5px; }
+  .screen { padding: 10px 10px 80px; }
+  .seg-metrics { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Touch device improvements ── */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger tap targets */
+  .nav-tab { min-height: 36px; display: flex; align-items: center; justify-content: center; }
+  .sug-chip { min-height: 36px; display: flex; align-items: center; }
+  .btn, .btn-primary, .btn-ghost { min-height: 42px; }
+  .send-btn { min-height: 42px; min-width: 42px; }
+  .seg-card { cursor: default; } /* remove hover state on touch */
+  /* Prevent double-tap zoom */
+  * { touch-action: manipulation; }
+  /* Smooth scrolling for iOS */
+  .messages, .ins-body, .mm-trace-list, .audit-body, .mm-detail { -webkit-overflow-scrolling: touch; }
+}
 </style>
 </head>
 <body>
@@ -912,6 +1030,8 @@ hr.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
             <button class="mm-tool-btn" onclick="mmReset()" title="Fit to screen">⌖</button>
             <div class="mm-tool-sep"></div>
             <span class="mm-tool-label" id="mm-zoom-label">100%</span>
+            <div class="mm-tool-sep"></div>
+            <button class="mm-tool-btn" id="mm-sidebar-toggle" onclick="toggleMmSidebar()" title="Traces & Audit" style="font-size:12px;display:none">☰</button>
           </div>
           <div class="mm-hint" id="mm-canvas-hint" style="display:none">Click any bubble to see what it means and where the data came from</div>
           <canvas id="mm-canvas"></canvas>
@@ -3060,7 +3180,16 @@ function initMmCanvas() {
   };
   mmCanvas.onwheel = e => { e.preventDefault(); const f = e.deltaY<0?1.1:0.9; mmZoom(f, e.offsetX, e.offsetY); };
 
-  window.addEventListener('resize', ()=>{ if(mmCanvas){ const w=document.getElementById('mm-canvas-wrap'); mmCanvas.width=w.clientWidth; mmCanvas.height=w.clientHeight; drawMap(); } });
+  function resizeCanvas() {
+    if (!mmCanvas) return;
+    const w = document.getElementById('mm-canvas-wrap');
+    if (!w) return;
+    mmCanvas.width = w.clientWidth;
+    mmCanvas.height = w.clientHeight;
+    drawMap();
+  }
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 300));
   if(reasoningTraces.length) { renderActiveTrace(); document.getElementById('mm-canvas-hint').style.display='block'; document.getElementById('mm-legend').style.display='block'; }
   else drawEmptyMap();
 }
@@ -3086,6 +3215,26 @@ function mmReset() {
   document.getElementById('mm-zoom-label').textContent = '100%';
   fitMap();
 }
+
+function toggleMmSidebar() {
+  const sidebar = document.querySelector('.mm-sidebar');
+  if (!sidebar) return;
+  const hidden = sidebar.style.display === 'none' || window.getComputedStyle(sidebar).display === 'none';
+  if (hidden) {
+    sidebar.style.cssText = 'display:flex;position:absolute;z-index:50;width:100%;height:100%;top:0;left:0;flex-direction:column';
+  } else {
+    sidebar.style.display = 'none';
+  }
+}
+
+function updateMobileUI() {
+  const isMobile = window.innerWidth <= 900;
+  const toggle = document.getElementById('mm-sidebar-toggle');
+  if (toggle) toggle.style.display = isMobile ? 'block' : 'none';
+}
+
+window.addEventListener('resize', updateMobileUI);
+window.addEventListener('orientationchange', () => setTimeout(updateMobileUI, 300));
 
 function renderActiveTrace() {
   if (activeTraceIdx < 0 || !reasoningTraces[activeTraceIdx]) { drawEmptyMap(); return; }
@@ -3842,6 +3991,7 @@ function numbersCloseEnough(a, b) {
 document.addEventListener('DOMContentLoaded', () => {
   const ta = document.getElementById('chat-input');
   if (ta) ta.addEventListener('input', function(){this.style.height='auto';this.style.height=this.scrollHeight+'px'});
+  updateMobileUI();
 });
 
 
