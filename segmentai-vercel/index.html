@@ -3575,12 +3575,13 @@ Respond ONLY in JSON:
 }`;
 
   try {
-    const res = await callAnthropic({
+    const d = await callAnthropic({
         model: 'claude-sonnet-4-5',
         max_tokens: 300,
         system: 'You write fact-check explanations. The verdict is always pre-determined and you never change it. You only explain it clearly using the numbers provided.',
         messages: [{role: 'user', content: prompt}]
       });
+    if (!d || !d.content) throw new Error('Empty response from AI');
     const raw = d.content?.[0]?.text || '';
     let result;
     try {
@@ -4759,15 +4760,27 @@ Return ONLY valid JSON — no markdown, no preamble:
   ]
 }`;
 
-  const res = await callAnthropic({
+  let d;
+  try {
+    d = await callAnthropic({
       model:'claude-sonnet-4-5',
       max_tokens:1000,
       system: 'You are a brutally honest data auditor. You find problems, not reassurance. You never say data is "solid" or "good enough". You always find something worth questioning.',
       messages:[{role:'user', content:prompt}]
     });
-  const raw = d.content?.[0]?.text || '';
-  const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-  return parsed.flags || [];
+  } catch(e) {
+    console.warn('Audit AI call failed:', e.message);
+    return [];
+  }
+  const raw = d?.content?.[0]?.text || '';
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    return parsed.flags || [];
+  } catch(_) {
+    console.warn('Audit flags JSON parse failed');
+    return [];
+  }
 }
 
 function renderAuditScore(score) {
